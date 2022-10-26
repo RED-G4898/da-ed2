@@ -108,7 +108,55 @@ public class AgendaFXApplication extends Application {
         }
     }
 
+    public boolean showRecordatorioEdicionDialogo(Recordatorio newRecordatorio) {
+        try {
+            // Load the fxml file and create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(AgendaFXApplication.class.getResource("RecordatorioEdicionDialogo.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
 
+            // Create the dialog Stage.
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Edición de Recordatorio");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+            // Set the newRecordatorio into the controller.
+            RecordatorioEdicionDialogoController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setRecordatorio(newRecordatorio);
+
+            // Show the dialog and wait until the user closes it
+            dialogStage.showAndWait();
+
+            return controller.isOkClicked();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public void showRecordatorioOverview() {
+        try {
+            // Load recordatorio overview.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(AgendaFXApplication.class.getResource("AgendaFX.fxml"));
+            AnchorPane recordatorioOverview = (AnchorPane) loader.load();
+
+            // Set recordatorio overview into the center of root layout.
+            layoutRaiz.setCenter(recordatorioOverview);
+
+            // Give the controller access to the main app.
+            AgendaFXController controller = loader.getController();
+            controller.setMainApp(this);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
         launch();

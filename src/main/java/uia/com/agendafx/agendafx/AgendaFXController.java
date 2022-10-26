@@ -15,44 +15,85 @@ import java.util.ResourceBundle;
 
 public class AgendaFXController implements Initializable {
 
-    @FXML private TableView<Contacto> table;
-    @FXML private TableColumn<Contacto, String> tipo;
-    @FXML private TableColumn<Contacto, String> nombre;
-    @FXML private TableColumn<Contacto, String> fechaRecordatorio;
-    @FXML private TableColumn<Contacto, String> fecha;
+    // Tabla de contactos
+    @FXML private TableView<Contacto> contactoTable;
+    @FXML private TableColumn<Contacto, String> contactoTipo;
+    @FXML private TableColumn<Contacto, String> contactoNombre;
+    @FXML private TableColumn<Contacto, String> contactoFechaRecordatorio;
+    @FXML private TableColumn<Contacto, String> contactoFecha;
+
+    // Labels de contactos
     @FXML
-    private Label tipoLabel;
+    private Label contactoTipoLabel;
     @FXML
-    private Label nombreLabel;
+    private Label contactoNombreLabel;
     @FXML
-    private Label fechaLabel;
+    private Label contactoFechaLabel;
     @FXML
-    private Label fechaRecordatorioLabel;
+    private Label contactoFechaRecordatorioLabel;
+
+
+    // Tabla de recordatorios
+    @FXML private TableView<Recordatorio> recordatorioTable;
+    @FXML private TableColumn<Recordatorio, String> recordatorioTipo;
+    @FXML private TableColumn<Recordatorio, String> recordatorioNombre;
+    @FXML private TableColumn<Recordatorio, String> recordatorioFechaRecordatorio;
+    @FXML private TableColumn<Recordatorio, String> recordatorioFecha;
+
+    // Labels de recordatorios
+    @FXML
+    private Label recordatorioTipoLabel;
+    @FXML
+    private Label recordatorioNombreLabel;
+    @FXML
+    private Label recordatorioFechaLabel;
+    @FXML
+    private Label recordatorioFechaRecordatorioLabel;
 
     // Reference to the main application.
     private AgendaFXApplication mainApp;
 
-    public ObservableList<Contacto> list = FXCollections.observableArrayList(
+    public ObservableList<Contacto> contactoList = FXCollections.observableArrayList(
             new Contacto("1", "Nava", "1-11-2020", "1-10-2020"),
             new Contacto("2",  "Fahim", "1-12-2021", "1-10-2020"),
             new Contacto("3",  "Shariful", "3-10-2022", "1-10-2020"),
             new Contacto("4",  "Alfonso", "3-10-2022", "1-10-2020")
     );
 
+    public ObservableList<Recordatorio> recordatorioList = FXCollections.observableArrayList(
+            new Recordatorio("1", "Noche buena", "24-12-2020", "24-12-2020"),
+            new Recordatorio("2",  "Navidad", "25-12-2021", "25-12-2021"),
+            new Recordatorio("3",  "Cena de año nuevo", "31-12-2022", "31-12-2022"),
+            new Recordatorio("4",  "Año nuevo", "01-01-2023", "01-01-2023")
+    );
+
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        tipo.setCellValueFactory(new PropertyValueFactory<Contacto, String>("tipo"));
-        nombre.setCellValueFactory(new PropertyValueFactory<Contacto, String>("nombre"));
-        fechaRecordatorio.setCellValueFactory(new PropertyValueFactory<Contacto, String>("fechaRecordatorio"));
-        fecha.setCellValueFactory(new PropertyValueFactory<Contacto, String>("fecha"));
-        table.setItems(list);
+        contactoTipo.setCellValueFactory(new PropertyValueFactory<Contacto, String>("tipo"));
+        contactoNombre.setCellValueFactory(new PropertyValueFactory<Contacto, String>("nombre"));
+        contactoFechaRecordatorio.setCellValueFactory(new PropertyValueFactory<Contacto, String>("fechaRecordatorio"));
+        contactoFecha.setCellValueFactory(new PropertyValueFactory<Contacto, String>("fecha"));
+        contactoTable.setItems(contactoList);
 
-        // Clear person details.
+        // Clear contact details.
         showContactoDetails(null);
 
         // Listen for selection changes and show the person details when changed.
-        table.getSelectionModel().selectedItemProperty().addListener(
+        contactoTable.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> showContactoDetails(newValue));
+
+        recordatorioTipo.setCellValueFactory(new PropertyValueFactory<Recordatorio, String>("tipo"));
+        recordatorioNombre.setCellValueFactory(new PropertyValueFactory<Recordatorio, String>("nombre"));
+        recordatorioFechaRecordatorio.setCellValueFactory(new PropertyValueFactory<Recordatorio, String>("fechaRecordatorio"));
+        recordatorioFecha.setCellValueFactory(new PropertyValueFactory<Recordatorio, String>("fecha"));
+        recordatorioTable.setItems(recordatorioList);
+
+        // Clear details.
+        showRecordatorioDetails(null);
+
+        // Listen for selection changes and show the person details when changed.
+        recordatorioTable.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> showRecordatorioDetails(newValue));
     }
 
     /**
@@ -63,8 +104,11 @@ public class AgendaFXController implements Initializable {
     public void setMainApp(AgendaFXApplication mainApp) {
         this.mainApp = mainApp;
 
-        // Add observable list data to the table
-        table.setItems(list);
+        // Add observable contactoList data to the contactoTable
+        contactoTable.setItems(contactoList);
+
+        // Add observable recordatorioList data to the recordatorioTable
+        recordatorioTable.setItems(recordatorioList);
     }
 
 
@@ -73,16 +117,16 @@ public class AgendaFXController implements Initializable {
     private void showContactoDetails(Contacto contacto) {
         if (contacto != null) {
             // Fill the labels with info from the contacto object.
-            tipoLabel.setText(contacto.getTipo());
-            nombreLabel.setText(contacto.getNombre());
-            fechaRecordatorioLabel.setText(contacto.getFechaRecordatorio());
-            fechaLabel.setText(contacto.getFecha());
+            contactoTipoLabel.setText(contacto.getTipo());
+            contactoNombreLabel.setText(contacto.getNombre());
+            contactoFechaRecordatorioLabel.setText(contacto.getFechaRecordatorio());
+            contactoFechaLabel.setText(contacto.getFecha());
         } else {
             // Contacto is null, remove all the text.
-            tipoLabel.setText("");
-            nombreLabel.setText("");
-            fechaRecordatorioLabel.setText("");
-            fechaLabel.setText("");
+            contactoTipoLabel.setText("");
+            contactoNombreLabel.setText("");
+            contactoFechaRecordatorioLabel.setText("");
+            contactoFechaLabel.setText("");
         }
     }
 
@@ -96,7 +140,7 @@ public class AgendaFXController implements Initializable {
         Contacto tempContacto = new Contacto();
         boolean okClicked = mainApp.showContactoEdicionDialogo(tempContacto);
         if (okClicked) {
-            list.add(tempContacto);
+            contactoList.add(tempContacto);
         }
     }
 
@@ -106,7 +150,7 @@ public class AgendaFXController implements Initializable {
      */
     @FXML
     private void handleEditContacto() {
-        Contacto selectedContacto = table.getSelectionModel().getSelectedItem();
+        Contacto selectedContacto = contactoTable.getSelectionModel().getSelectedItem();
         if (selectedContacto != null) {
             boolean okClicked = mainApp.showContactoEdicionDialogo(selectedContacto);
             if (okClicked) {
@@ -119,11 +163,65 @@ public class AgendaFXController implements Initializable {
             alert.initOwner(mainApp.getPrimaryStage());
             alert.setTitle("No Selection");
             alert.setHeaderText("No Contacto Selected");
-            alert.setContentText("Please select a person in the table.");
+            alert.setContentText("Please select a person in the contactoTable.");
 
             alert.showAndWait();
         }
     }
 
+    private void showRecordatorioDetails(Recordatorio recordatorio) {
+        if (recordatorio != null) {
+            // Fill the labels with info from the recordatorio object.
+            recordatorioTipoLabel.setText(recordatorio.getTipo());
+            recordatorioNombreLabel.setText(recordatorio.getNombre());
+            recordatorioFechaRecordatorioLabel.setText(recordatorio.getFechaRecordatorio());
+            recordatorioFechaLabel.setText(recordatorio.getFecha());
+        } else {
+            // Recordatorio is null, remove all the text.
+            recordatorioTipoLabel.setText("");
+            recordatorioNombreLabel.setText("");
+            recordatorioFechaRecordatorioLabel.setText("");
+            recordatorioFechaLabel.setText("");
+        }
+    }
 
+    /**
+     * Called when the user clicks the new button. Opens a dialog to edit
+     * details for a new person.
+     */
+
+    @FXML
+    private void handleNewRecordatorio() {
+        Recordatorio tempRecordatorio = new Recordatorio();
+        boolean okClicked = mainApp.showRecordatorioEdicionDialogo(tempRecordatorio);
+        if (okClicked) {
+            recordatorioList.add(tempRecordatorio);
+        }
+    }
+
+    /**
+     * Called when the user clicks the edit button. Opens a dialog to edit
+     * details for the selected person.
+     */
+
+    @FXML
+    private void handleEditRecordatorio() {
+        Recordatorio selectedRecordatorio = recordatorioTable.getSelectionModel().getSelectedItem();
+        if (selectedRecordatorio != null) {
+            boolean okClicked = mainApp.showRecordatorioEdicionDialogo(selectedRecordatorio);
+            if (okClicked) {
+                showRecordatorioDetails(selectedRecordatorio);
+            }
+
+        } else {
+            // Nothing selected.
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.initOwner(mainApp.getPrimaryStage());
+            alert.setTitle("No Selection");
+            alert.setHeaderText("No Recordatorio Selected");
+            alert.setContentText("Please select a person in the recordatorioTable.");
+
+            alert.showAndWait();
+        }
+    }
 }
